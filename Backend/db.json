@@ -1,0 +1,29 @@
+{
+    "users": [
+        {
+        "email": "negipriyanka949@gmail.com",
+        "password": "Priyanka@123",
+        "id": 1
+    }
+],
+    "todos": [
+        {
+        "title": "Study",
+        "description": "I have to study for 2 hours ethical hacking.",
+        "completed": false,
+        "id": 1
+    },
+    {
+        "title": "Assignment",
+        "description": "I have to do College Assignment today.",
+        "completed": false,
+        "id": 2
+    },
+    {
+        "title": "Fill Forms",
+        "description": "I have to do fill forms which has been pending",
+        "completed": false,
+        "id": 3
+    }
+    ]
+}

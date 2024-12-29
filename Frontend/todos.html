@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo App</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="index.html">Home</a>
+    <a href="todos.html">Todos</a>
+    <a href="logout.html">Logout</a>
+  </nav>
+
+  <main>
+    <h1>Your Todo List</h1>
+    
+    <form id="add-todo-form">
+      <label for="todo-title">Todo Title</label>
+      <input type="text" id="todo-title" placeholder="Enter todo title" required />
+      <label for="todo-description">Description</label>
+      <input type="text" id="todo-description" placeholder="Enter description" required />
+      <button type="submit">Add Todo</button>
+    </form>
+
+    <div id="todo-list">
+      <h2>Your Todos</h2>
+      <ul id="todos">
+      </ul>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2024 Todo App</p>
+  </footer>
+
+  <script src="js/todos.js"></script>
+</body>
+</html>

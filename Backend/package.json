@@ -1,0 +1,17 @@
+{
+    "name": "todo-backend",
+    "version": "1.0.0",
+    "description": "A simple JSON Server backend for a Todo App",
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js"
+    },
+    "dependencies": {
+        "json-server": "^0.17.3"
+    },
+    "engines": {
+        "node": ">=14.0.0"
+    },
+    "keywords": ["json-server", "todo", "backend"],
+    "license": "MIT"
+}
