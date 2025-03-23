@@ -2,6 +2,11 @@
 
 The **Mini-Todo App** is a simple yet functional task management application built using **HTML, CSS, and JavaScript**, with **Glitch** handling the backend and data storage. It allows users to **sign up, log in, manage their todos**, and securely log out. Users can **add tasks with a title and description, view their tasks, edit them, and delete them** as needed.  
 
+![Todo Preview](screenshots/main.png)
+
+![Todo Preview](screenshots/todo.png)
+
+
 ## ✨ Features  
 
 ✔️ **User Authentication** – Sign up and log in securely.  
