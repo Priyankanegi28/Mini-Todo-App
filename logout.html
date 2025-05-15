@@ -3,30 +3,40 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Logout - Todo App</title>
+  <title>Logout - TodoPro</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/logout.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-  <nav class="navbar">
-    <a href="home.html">Home</a>
-    <a href="todos.html">Todos</a>
-    <a href="logout.html">Logout</a>
-  </nav>
+  <header include-navbar></header>
 
-  <main>
-    <h1>Logout</h1>
-    <p>Are you sure you want to log out?</p>
-    
-    <form id="logout-form">
-      <button type="submit">Log Out</button>
-    </form>
-
+  <main class="logout-container">
+    <div class="logout-card">
+      <div class="logout-icon">
+        <i class="fas fa-sign-out-alt"></i>
+      </div>
+      <h1>Ready to leave?</h1>
+      <p>Are you sure you want to log out of your TodoPro account?</p>
+      
+      <form id="logout-form" class="logout-form">
+        <div class="form-buttons">
+          <button type="button" class="btn btn-secondary" id="cancel-logout">Cancel</button>
+          <button type="submit" class="btn btn-danger">Log Out</button>
+        </div>
+      </form>
+    </div>
   </main>
 
-  <footer>
-    <p>&copy; 2024 Todo App</p>
-  </footer>
-
+  <footer include-footer></footer>
   <script src="js/logout.js"></script>
+  <script src="js/include.js"></script>
+
+  <script>
+    document.getElementById('cancel-logout').addEventListener('click', function() {
+      window.location.href = 'todos.html';
+    });
+  </script>
 </body>
 </html>

@@ -1,59 +1,431 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Todo App - Organize Your Tasks</title>
+  <title>TodoPro - Organize Your Tasks Effectively</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <nav class="navbar">
-      <a href="index.html">Home</a>
-      <a href="signup.html">Signup</a>
-      <a href="login.html">Login</a>
-    </nav>
-  </header>
+  <header include-navbar></header>
 
   <main>
     <section class="hero">
-      <h1>Stay Organized with Todo App</h1>
-      <p>Manage your daily tasks efficiently and never miss a deadline!</p>
-      <a href="signup.html" class="btn">Get Started</a>
-    </section>
-
-    <section class="features">
-      <h2>Why Use Our Todo App?</h2>
-      <div class="feature-grid">
-        <div class="feature">
-          <h3>Easy to Use</h3>
-          <p>Simple and intuitive interface for quick task management.</p>
+      <div class="hero-content animate__animated animate__fadeInLeft">
+        <h1>Master Your <span class="highlight">Productivity</span></h1>
+        <p class="subtitle">Organize, prioritize, and conquer your tasks with our intuitive todo app. Get more done with less stress.</p>
+        <div class="cta-buttons">
+          <a href="signup.html" class="btn primary pulse">Start for Free <i class="fas fa-arrow-right"></i></a>
+          <a href="#features" class="btn secondary">Learn More <i class="fas fa-angle-down"></i></a>
         </div>
-        <div class="feature">
-          <h3>Real-time Sync</h3>
-          <p>Access your tasks anytime, anywhere across devices.</p>
+        <div class="stats">
+          <div class="stat-item">
+            <div class="stat-number" data-count="250000">0</div>
+            <div class="stat-label">Active Users</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number" data-count="98">0</div>
+            <div class="stat-label">Satisfaction Rate</div>
+          </div>
         </div>
-        <div class="feature">
-          <h3>Task Reminders</h3>
-          <p>Never forget important tasks with timely notifications.</p>
+      </div>
+      <div class="hero-image animate__animated animate__fadeInRight">
+        <img src="https://illustrations.popsy.co/amber/digital-nomad.svg" alt="Productivity illustration">
+        <div class="floating-badge">
+          <i class="fas fa-check-circle"></i>
+          <span>Task Completed!</span>
         </div>
       </div>
     </section>
 
-    <section class="task-preview">
-      <h2>Preview Your Tasks</h2>
-      <ul class="task-list">
-        <li>✔ Complete the project report</li>
-        <li>🔔 Meeting with client at 4 PM</li>
-        <li>✍ Plan weekend itinerary</li>
-      </ul>
-      <a href="login.html" class="btn">View More Tasks</a>
+    <section id="features" class="features">
+      <div class="section-header">
+        <h2>Why TodoPro Stands Out</h2>
+        <p class="section-subtitle">Powerful features designed to boost your productivity</p>
+      </div>
+      <div class="feature-grid">
+        <div class="feature-card" data-aos="fade-up">
+          <div class="feature-icon">
+            <i class="fas fa-bolt"></i>
+          </div>
+          <h3>Lightning Fast</h3>
+          <p>Quick add and organize tasks with keyboard shortcuts and intuitive controls that save you time.</p>
+          <a href="#" class="feature-link">See how it works <i class="fas fa-arrow-right"></i></a>
+        </div>
+        <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+          <div class="feature-icon">
+            <i class="fas fa-layer-group"></i>
+          </div>
+          <h3>Smart Categories</h3>
+          <p>Organize tasks by projects, tags, or custom categories that adapt to your workflow.</p>
+          <a href="#" class="feature-link">Explore categories <i class="fas fa-arrow-right"></i></a>
+        </div>
+        <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+          <div class="feature-icon">
+            <i class="fas fa-bell"></i>
+          </div>
+          <h3>Smart Reminders</h3>
+          <p>Never miss deadlines with customizable notifications and intelligent recurring tasks.</p>
+          <a href="#" class="feature-link">Set reminders <i class="fas fa-arrow-right"></i></a>
+        </div>
+        <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+          <div class="feature-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <h3>Progress Tracking</h3>
+          <p>Visualize your productivity with beautiful charts and insightful completion statistics.</p>
+          <a href="#" class="feature-link">View analytics <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="demo">
+      <div class="section-header">
+        <h2>See It In Action</h2>
+        <p class="section-subtitle">Experience our intuitive interface with this interactive demo</p>
+      </div>
+      <div class="demo-container">
+        <div class="demo-todo">
+          <div class="todo-header">
+            <h3>Today's Tasks</h3>
+            <div class="progress-bar">
+              <div class="progress" style="width: 65%"></div>
+              <span>65% complete</span>
+            </div>
+          </div>
+          <ul class="task-list">
+            <li class="task high-priority completed">
+              <div class="task-content">
+                <span class="checkmark">✓</span>
+                <span class="task-text">Complete project proposal</span>
+              </div>
+              <div class="task-actions">
+                <span class="priority-badge">High</span>
+                <span class="due-date">Today</span>
+                <button class="btn-icon task-btn"><i class="fas fa-ellipsis-v"></i></button>
+              </div>
+            </li>
+            <li class="task medium-priority">
+              <div class="task-content">
+                <span class="checkmark"></span>
+                <span class="task-text">Team meeting preparation</span>
+              </div>
+              <div class="task-actions">
+                <span class="priority-badge">Medium</span>
+                <span class="due-date">Today</span>
+                <button class="btn-icon task-btn"><i class="fas fa-ellipsis-v"></i></button>
+              </div>
+            </li>
+            <li class="task low-priority">
+              <div class="task-content">
+                <span class="checkmark"></span>
+                <span class="task-text">Research new productivity tools</span>
+              </div>
+              <div class="task-actions">
+                <span class="priority-badge">Low</span>
+                <span class="due-date">Tomorrow</span>
+                <button class="btn-icon task-btn"><i class="fas fa-ellipsis-v"></i></button>
+              </div>
+            </li>
+          </ul>
+          <div class="add-task">
+            <input type="text" placeholder="Add new task..." class="task-input">
+            <button class="add-btn pulse"><i class="fas fa-plus"></i></button>
+          </div>
+        </div>
+      </div>
+      <div class="demo-cta">
+        <a href="signup.html" class="btn primaryy">Try It Yourself <i class="fas fa-arrow-right"></i></a>
+      </div>
+    </section>
+
+    <section class="testimonials">
+      <div class="section-header">
+        <h2>What Our Users Say</h2>
+        <p class="section-subtitle">Join thousands of satisfied users who transformed their productivity</p>
+      </div>
+      <div class="testimonial-carousel">
+        <div class="testimonial active">
+          <div class="quote">"TodoPro has completely transformed how I organize my work. The priority system helps me focus on what really matters, and the mobile sync keeps me on track everywhere."</div>
+          <div class="author">
+            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sarah Johnson">
+            <div>
+              <h4>Sarah Johnson</h4>
+              <p>Project Manager at TechCorp</p>
+              <div class="rating">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial">
+          <div class="quote">"As a freelancer, TodoPro helps me manage multiple client projects effortlessly. The progress tracking motivates me to stay productive every day."</div>
+          <div class="author">
+            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Michael Chen">
+            <div>
+              <h4>Michael Chen</h4>
+              <p>Freelance Developer</p>
+              <div class="rating">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-nav">
+          <button class="testimonial-prev"><i class="fas fa-chevron-left"></i></button>
+          <div class="testimonial-dots">
+            <span class="dot active"></span>
+            <span class="dot"></span>
+          </div>
+          <button class="testimonial-next"><i class="fas fa-chevron-right"></i></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="pricing">
+      <div class="section-header">
+        <h2>Simple, Transparent Pricing</h2>
+        <p class="section-subtitle">Choose the plan that fits your needs</p>
+      </div>
+      <div class="pricing-grid">
+        <div class="pricing-card" data-aos="fade-up">
+          <div class="pricing-header">
+            <h3>Free</h3>
+            <div class="price">$0<span>/month</span></div>
+          </div>
+          <ul class="pricing-features">
+            <li><i class="fas fa-check"></i> Up to 5 projects</li>
+            <li><i class="fas fa-check"></i> Basic task management</li>
+            <li><i class="fas fa-check"></i> 1 device sync</li>
+            <li><i class="fas fa-check"></i> Email support</li>
+          </ul>
+          <a href="signup.html" class="btn secondary">Get Started</a>
+        </div>
+        <div class="pricing-card featured" data-aos="fade-up" data-aos-delay="100">
+          <div class="popular-badge">Most Popular</div>
+          <div class="pricing-header">
+            <h3>Pro</h3>
+            <div class="price">$9<span>/month</span></div>
+          </div>
+          <ul class="pricing-features">
+            <li><i class="fas fa-check"></i> Unlimited projects</li>
+            <li><i class="fas fa-check"></i> Advanced features</li>
+            <li><i class="fas fa-check"></i> 5 device sync</li>
+            <li><i class="fas fa-check"></i> Priority support</li>
+            <li><i class="fas fa-check"></i> Progress analytics</li>
+          </ul>
+          <a href="signup.html" class="btn primary">Upgrade Now</a>
+        </div>
+        <div class="pricing-card" data-aos="fade-up" data-aos-delay="200">
+          <div class="pricing-header">
+            <h3>Team</h3>
+            <div class="price">$25<span>/month</span></div>
+          </div>
+          <ul class="pricing-features">
+            <li><i class="fas fa-check"></i> Everything in Pro</li>
+            <li><i class="fas fa-check"></i> Up to 10 team members</li>
+            <li><i class="fas fa-check"></i> Collaboration tools</li>
+            <li><i class="fas fa-check"></i> Team analytics</li>
+            <li><i class="fas fa-check"></i> Dedicated account manager</li>
+          </ul>
+          <a href="signup.html" class="btn secondary">Contact Sales</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta">
+      <div class="cta-content">
+        <h2>Ready to Transform Your Productivity?</h2>
+        <p>Join thousands of professionals who already boosted their efficiency with TodoPro</p>
+        <div class="cta-buttons">
+          <a href="signup.html" class="btn primary pulse">Start Free Trial</a>
+          <a href="#" class="btn secondary">Schedule Demo</a>
+        </div>
+      </div>
     </section>
   </main>
 
-  <footer>
-    <p>&copy; 2024 Todo App. All rights reserved.</p>
-  </footer>
+  <footer include-footer></footer>
 
+  <div class="scroll-top">
+    <button id="scroll-top-btn" class="btn-icon" aria-label="Scroll to top">
+      <i class="fas fa-arrow-up"></i>
+    </button>
+  </div>
+
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    // Initialize AOS
+    AOS.init({
+      duration: 800,
+      easing: 'ease-in-out',
+      once: true
+    });
+
+    // Include HTML files
+    function includeHTML() {
+      const includes = document.querySelectorAll('[include-navbar], [include-footer]');
+      
+      includes.forEach(include => {
+        const file = include.hasAttribute('include-navbar') ? 'navbar.html' : 'footer.html';
+        
+        fetch(file)
+          .then(response => response.text())
+          .then(data => {
+            include.outerHTML = data;
+            initComponents(); // Initialize components after includes are loaded
+          })
+          .catch(err => {
+            console.error('Error loading include:', err);
+            include.style.display = 'none';
+          });
+      });
+    }
+
+    // Initialize all components
+    function initComponents() {
+      // Mobile menu toggle
+      const hamburger = document.querySelector('.hamburger');
+      const navLinks = document.querySelector('.nav-links');
+      
+      if (hamburger && navLinks) {
+        hamburger.addEventListener('click', () => {
+          navLinks.classList.toggle('active');
+          hamburger.classList.toggle('active');
+        });
+      }
+
+      // Scroll to top button
+      const scrollTopBtn = document.getElementById('scroll-top-btn');
+      const scrollTop = document.querySelector('.scroll-top');
+
+      window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 300) {
+          scrollTop.classList.add('visible');
+        } else {
+          scrollTop.classList.remove('visible');
+        }
+      });
+
+      if (scrollTopBtn) {
+        scrollTopBtn.addEventListener('click', () => {
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+          });
+        });
+      }
+
+      // Testimonial carousel
+      let currentTestimonial = 0;
+      const testimonials = document.querySelectorAll('.testimonial');
+      const dots = document.querySelectorAll('.dot');
+
+      function showTestimonial(index) {
+        testimonials.forEach(testimonial => testimonial.classList.remove('active'));
+        dots.forEach(dot => dot.classList.remove('active'));
+        
+        testimonials[index].classList.add('active');
+        dots[index].classList.add('active');
+        currentTestimonial = index;
+      }
+
+      const testimonialNext = document.querySelector('.testimonial-next');
+      const testimonialPrev = document.querySelector('.testimonial-prev');
+
+      if (testimonialNext && testimonialPrev) {
+        testimonialNext.addEventListener('click', () => {
+          let next = currentTestimonial + 1;
+          if (next >= testimonials.length) next = 0;
+          showTestimonial(next);
+        });
+
+        testimonialPrev.addEventListener('click', () => {
+          let prev = currentTestimonial - 1;
+          if (prev < 0) prev = testimonials.length - 1;
+          showTestimonial(prev);
+        });
+
+        dots.forEach((dot, index) => {
+          dot.addEventListener('click', () => showTestimonial(index));
+        });
+      }
+
+      // Animate stats counters
+      function animateCounters() {
+        const counters = document.querySelectorAll('.stat-number');
+        const speed = 200;
+        
+        counters.forEach(counter => {
+          const target = +counter.getAttribute('data-count');
+          const count = +counter.innerText;
+          const increment = target / speed;
+          
+          if (count < target) {
+            counter.innerText = Math.ceil(count + increment);
+            setTimeout(animateCounters, 1);
+          } else {
+            counter.innerText = target;
+          }
+        });
+      }
+
+      // Start animation when stats section is in view
+      const statsSection = document.querySelector('.stats');
+      if (statsSection) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              animateCounters();
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.5 });
+
+        observer.observe(statsSection);
+      }
+
+      // Theme toggle
+      const themeToggle = document.getElementById('theme-toggle');
+
+      function setTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+      }
+
+      function toggleTheme() {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        setTheme(newTheme);
+      }
+
+      // Initialize theme
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      setTheme(savedTheme);
+
+      // Add event listener if toggle exists
+      if (themeToggle) {
+        themeToggle.addEventListener('click', toggleTheme);
+      }
+    }
+
+    // Initialize when DOM is loaded
+    document.addEventListener('DOMContentLoaded', () => {
+      includeHTML();
+      initComponents();
+    });
+  </script>
 </body>
 </html>

@@ -3,30 +3,144 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Signup</title>
+  <title>Sign Up - TodoPro</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/signup.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-  <header>
-    <nav class="navbar">
-      <a href="index.html">Home</a>
-      <a href="signup.html">Signup</a>
-      <a href="login.html">Login</a>
-    </nav>
-  </header>
-  <main>
-    <h2>Signup</h2>
-    <form id="signup-form">
-      <label>Email:</label>
-      <input type="email" id="email" required>
-      <label>Password:</label>
-      <input type="password" id="password" required>
-      <button type="submit">Signup</button>
-    </form>
+  <header include-navbar></header>
+
+  <main class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <h1>Create Your Account</h1>
+        <p>Join thousands of productive people using TodoPro</p>
+      </div>
+      
+      <form id="signup-form" class="auth-form">
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <div class="input-with-icon">
+            <i class="fas fa-user"></i>
+            <input type="text" id="name" placeholder="Enter your full name" required>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <div class="input-with-icon">
+            <i class="fas fa-envelope"></i>
+            <input type="email" id="email" placeholder="Enter your email" required>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="input-with-icon">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="password" placeholder="Create a password" required>
+            <button type="button" class="show-password" aria-label="Show password">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <div class="password-strength">
+            <div class="strength-meter"></div>
+            <span class="strength-text">Password strength: weak</span>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="confirm-password">Confirm Password</label>
+          <div class="input-with-icon">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="confirm-password" placeholder="Confirm your password" required>
+          </div>
+        </div>
+        
+        <div class="form-group terms">
+          <input type="checkbox" id="terms" required>
+          <label for="terms">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
+        </div>
+        
+        <button type="submit" class="btn btn-block">Create Account</button>
+        
+        <div class="auth-footer">
+          <p>Already have an account? <a href="login.html">Log in</a></p>
+        </div>
+      </form>
+    </div>
+    
+    <div class="auth-benefits">
+      <h3>Why join TodoPro?</h3>
+      <ul class="benefits-list">
+        <li><i class="fas fa-check-circle"></i> Unlimited tasks and projects</li>
+        <li><i class="fas fa-check-circle"></i> Cross-device synchronization</li>
+        <li><i class="fas fa-check-circle"></i> Smart reminders and notifications</li>
+        <li><i class="fas fa-check-circle"></i> Productivity analytics</li>
+        <li><i class="fas fa-check-circle"></i> 24/7 customer support</li>
+      </ul>
+    </div>
   </main>
-  <footer>
-    <p>&copy; 2024 Todo App</p>
-  </footer>
+
+  <footer include-footer></footer>
+
   <script src="js/script.js"></script>
+  <script src="js/include.js"></script>
+
+  <script>
+    // Password strength indicator
+    document.getElementById('password').addEventListener('input', function() {
+      const password = this.value;
+      const meter = document.querySelector('.strength-meter');
+      const text = document.querySelector('.strength-text');
+      
+      // Reset
+      meter.style.width = '0%';
+      meter.style.backgroundColor = '#dc3545';
+      text.textContent = 'Password strength: weak';
+      
+      if (password.length === 0) return;
+      
+      // Calculate strength
+      let strength = 0;
+      
+      // Length
+      if (password.length > 7) strength += 25;
+      if (password.length > 11) strength += 25;
+      
+      // Complexity
+      if (/[A-Z]/.test(password)) strength += 15;
+      if (/[0-9]/.test(password)) strength += 15;
+      if (/[^A-Za-z0-9]/.test(password)) strength += 20;
+      
+      // Update UI
+      meter.style.width = strength + '%';
+      
+      if (strength > 60) {
+        meter.style.backgroundColor = '#ffc107';
+        text.textContent = 'Password strength: good';
+      }
+      if (strength > 80) {
+        meter.style.backgroundColor = '#28a745';
+        text.textContent = 'Password strength: strong';
+      }
+    });
+    
+    // Toggle password visibility
+    document.querySelector('.show-password').addEventListener('click', function() {
+      const passwordInput = document.getElementById('password');
+      const icon = this.querySelector('i');
+      
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        icon.classList.replace('fa-eye', 'fa-eye-slash');
+      } else {
+        passwordInput.type = 'password';
+        icon.classList.replace('fa-eye-slash', 'fa-eye');
+      }
+    });
+  </script>
 </body>
 </html>

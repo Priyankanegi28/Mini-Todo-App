@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Navbar</title>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+  <header class="sticky-header">
+    <nav class="navbar">
+      <div class="nav-brand">
+        <i class="fas fa-tasks"></i>
+        <span>TodoPro</span>
+      </div>
+      <div class="nav-links">
+        <a href="index.html" class="active"><i class="fas fa-home"></i> Home</a>
+        <a href="signup.html"><i class="fas fa-user-plus"></i> Signup</a>
+        <a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+        
+      </div>
+      
+    </nav>
+  </header>
+  <script src="js/include.js"></script>
+
+
+  <!-- JavaScript for mobile menu toggle (basic functionality) -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const hamburger = document.querySelector('.hamburger');
+      const navLinks = document.querySelector('.nav-links');
+      
+      hamburger.addEventListener('click', function() {
+        navLinks.classList.toggle('active');
+      });
+
+      // Highlight current page in navbar
+      const currentPage = location.pathname.split('/').pop();
+      document.querySelectorAll('.nav-links a').forEach(link => {
+        if (link.getAttribute('href') === currentPage) {
+          link.classList.add('active');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

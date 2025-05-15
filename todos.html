@@ -3,38 +3,159 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Todo App</title>
+  <title>My Todos - TodoPro</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/todos.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-  <nav class="navbar">
-    <a href="index.html">Home</a>
-    <a href="todos.html">Todos</a>
-    <a href="logout.html">Logout</a>
-  </nav>
 
-  <main>
-    <h1>Your Todo List</h1>
+  <main class="todos-container">
+    <div class="sidebar">
+      <div class="user-profile">
+        <div class="avatar">
+          <i class="fas fa-user"></i>
+        </div>
+        <div class="user-info">
+          <h3 id="username">User Name</h3>
+          <p id="user-email">user@example.com</p>
+        </div>
+      </div>
+      
+      <div class="sidebar-menu">
+        <button class="menu-item active" data-filter="all">
+          <i class="fas fa-list"></i> All Tasks
+        </button>
+        <button class="menu-item" data-filter="today">
+          <i class="fas fa-calendar-day"></i> Today
+        </button>
+        <button class="menu-item" data-filter="important">
+          <i class="fas fa-star"></i> Important
+        </button>
+        <button class="menu-item" data-filter="completed">
+          <i class="fas fa-check-circle"></i> Completed
+        </button>
+      </div>
+      
+      <div class="stats">
+        <div class="stat-item">
+          <span class="stat-number" id="total-tasks">0</span>
+          <span class="stat-label">Total Tasks</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" id="completed-tasks">0</span>
+          <span class="stat-label">Completed</span>
+        </div>
+      </div>
+    </div>
     
-    <form id="add-todo-form">
-      <label for="todo-title">Todo Title</label>
-      <input type="text" id="todo-title" placeholder="Enter todo title" required />
-      <label for="todo-description">Description</label>
-      <input type="text" id="todo-description" placeholder="Enter description" required />
-      <button type="submit">Add Todo</button>
-    </form>
-
-    <div id="todo-list">
-      <h2>Your Todos</h2>
-      <ul id="todos">
-      </ul>
+    <div class="todos-content">
+      <div class="content-header">
+        <h1>My Tasks</h1>
+        <button class="btn" id="add-task-btn">
+          <i class="fas fa-plus"></i> Add Task
+        </button>
+      </div>
+      
+      <div class="task-form-container" id="task-form-container">
+        <form id="add-todo-form" class="task-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="todo-title">Title</label>
+              <input type="text" id="todo-title" placeholder="What needs to be done?" required>
+            </div>
+            <div class="form-group">
+              <label for="todo-due-date">Due Date</label>
+              <input type="date" id="todo-due-date">
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="todo-description">Description</label>
+            <textarea id="todo-description" placeholder="Add details..."></textarea>
+          </div>
+          
+          <div class="form-actions">
+            <div class="priority-selector">
+              <label>Priority:</label>
+              <div class="priority-options">
+                <button type="button" class="priority-option" data-priority="low">Low</button>
+                <button type="button" class="priority-option active" data-priority="medium">Medium</button>
+                <button type="button" class="priority-option" data-priority="high">High</button>
+              </div>
+            </div>
+            
+            <div class="form-buttons">
+              <button type="button" class="btn btn-secondary" id="cancel-task-btn">Cancel</button>
+              <button type="submit" class="btn">Add Task</button>
+            </div>
+          </div>
+        </form>
+      </div>
+      
+      <div class="task-filters">
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <input type="text" id="task-search" placeholder="Search tasks...">
+        </div>
+        <div class="sort-options">
+          <label>Sort by:</label>
+          <select id="task-sort">
+            <option value="due-date">Due Date</option>
+            <option value="priority">Priority</option>
+            <option value="created">Recently Added</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="tasks-list" id="tasks-list">
+        <div class="empty-state">
+          <img src="https://cdn-icons-png.flaticon.com/512/4076/4076478.png" alt="No tasks">
+          <h3>No tasks yet</h3>
+          <p>Click "Add Task" to create your first todo</p>
+        </div>
+      </div>
     </div>
   </main>
 
-  <footer>
-    <p>&copy; 2024 Todo App</p>
-  </footer>
+  <footer include-footer></footer>
 
   <script src="js/todos.js"></script>
+  <script src="js/include.js"></script>
+
+  <script>
+    // Set user info
+    document.addEventListener('DOMContentLoaded', function() {
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (user) {
+        document.getElementById('username').textContent = user.name || 'User';
+        document.getElementById('user-email').textContent = user.email;
+      }
+      
+      // Toggle task form
+      const addTaskBtn = document.getElementById('add-task-btn');
+      const taskFormContainer = document.getElementById('task-form-container');
+      const cancelTaskBtn = document.getElementById('cancel-task-btn');
+      
+      addTaskBtn.addEventListener('click', function() {
+        taskFormContainer.style.display = 'block';
+        document.getElementById('todo-title').focus();
+      });
+      
+      cancelTaskBtn.addEventListener('click', function() {
+        taskFormContainer.style.display = 'none';
+      });
+      
+      // Priority selector
+      const priorityOptions = document.querySelectorAll('.priority-option');
+      priorityOptions.forEach(option => {
+        option.addEventListener('click', function() {
+          priorityOptions.forEach(opt => opt.classList.remove('active'));
+          this.classList.add('active');
+        });
+      });
+    });
+  </script>
 </body>
 </html>
