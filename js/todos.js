@@ -408,3 +408,37 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   // ... rest of your existing code
 });
+
+
+// new one
+
+
+// Replace the checkForReminders function in todos.js with:
+function checkForReminders() {
+  fetch(`${apiUrl}/pending-tasks?email=${user.email}`)
+    .then(response => response.json())
+    .then(pendingTasks => {
+      if (pendingTasks.length > 0) {
+        const subject = `You have ${pendingTasks.length} pending task(s)`;
+        let message = `Hi ${user.name || 'there'},\n\n`;
+        message += `Here's a reminder about your pending tasks:\n\n`;
+
+        pendingTasks.forEach(task => {
+          const dueDate = new Date(task.dueDate).toLocaleDateString();
+          message += `- ${task.title} (Due: ${dueDate}, Priority: ${task.priority})\n`;
+        });
+
+        message += `\nPlease complete your tasks on time!\n\nBest regards,\nTodoPro Team`;
+
+        // Send reminder email
+        return fetch(`${apiUrl}/send-reminder`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: user.email, subject, message })
+        });
+      }
+    })
+    .catch(error => {
+      console.error('Error checking for reminders:', error);
+    });
+}

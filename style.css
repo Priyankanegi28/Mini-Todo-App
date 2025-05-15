@@ -181,6 +181,7 @@ img {
 }
 
 /* Navbar */
+/* Navbar */
 .sticky-header {
   position: sticky;
   top: 0;
@@ -196,6 +197,7 @@ img {
   align-items: center;
   padding: 1rem 2rem;
   color: white;
+  position: relative;
 }
 
 .nav-brand {
@@ -204,6 +206,7 @@ img {
   gap: 0.5rem;
   font-size: 1.5rem;
   font-weight: 600;
+  z-index: 1001;
 }
 
 .nav-brand i {
@@ -214,6 +217,7 @@ img {
   display: flex;
   align-items: center;
   gap: 1.5rem;
+  transition: all 0.3s ease;
 }
 
 .nav-links a {
@@ -242,7 +246,6 @@ img {
   transition: width 0.3s ease;
 }
 
-
 .hamburger {
   display: none;
   background: none;
@@ -250,6 +253,39 @@ img {
   color: white;
   font-size: 1.5rem;
   cursor: pointer;
+  z-index: 1001;
+}
+
+/* Mobile menu styles */
+@media (max-width: 768px) {
+  .hamburger {
+    display: block;
+  }
+  
+  .nav-links {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    background-color: var(--primary-dark);
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 0;
+    gap: 1.5rem;
+    transform: translateY(-150%);
+    opacity: 0;
+    z-index: 1000;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .nav-links.active {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  
+  .navbar {
+    padding: 1rem;
+  }
 }
 
 /* Hero Section */

@@ -7,7 +7,6 @@
   <!-- Font Awesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
-
 </head>
 <body>
   <header class="sticky-header">
@@ -16,19 +15,20 @@
         <i class="fas fa-tasks"></i>
         <span>TodoPro</span>
       </div>
+      
+      <!-- Hamburger menu button -->
+      <button class="hamburger">
+        <i class="fas fa-bars"></i>
+      </button>
+      
       <div class="nav-links">
         <a href="index.html" class="active"><i class="fas fa-home"></i> Home</a>
         <a href="signup.html"><i class="fas fa-user-plus"></i> Signup</a>
         <a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
-        
       </div>
-      
     </nav>
   </header>
-  <script src="js/include.js"></script>
-
-
-  <!-- JavaScript for mobile menu toggle (basic functionality) -->
+  
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       const hamburger = document.querySelector('.hamburger');
@@ -36,6 +36,15 @@
       
       hamburger.addEventListener('click', function() {
         navLinks.classList.toggle('active');
+        // Toggle hamburger icon between bars and X
+        const icon = this.querySelector('i');
+        if (navLinks.classList.contains('active')) {
+          icon.classList.remove('fa-bars');
+          icon.classList.add('fa-times');
+        } else {
+          icon.classList.remove('fa-times');
+          icon.classList.add('fa-bars');
+        }
       });
 
       // Highlight current page in navbar
@@ -44,6 +53,18 @@
         if (link.getAttribute('href') === currentPage) {
           link.classList.add('active');
         }
+      });
+      
+      // Close mobile menu when clicking on a link
+      document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', () => {
+          if (window.innerWidth <= 768) {
+            navLinks.classList.remove('active');
+            const icon = hamburger.querySelector('i');
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+          }
+        });
       });
     });
   </script>

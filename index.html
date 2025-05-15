@@ -9,6 +9,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
 </head>
 <body>
   <header include-navbar></header>
@@ -258,6 +260,7 @@
   </main>
 
   <footer include-footer></footer>
+  
 
   <div class="scroll-top">
     <button id="scroll-top-btn" class="btn-icon" aria-label="Scroll to top">
@@ -265,7 +268,9 @@
     </button>
   </div>
 
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="js/script.js"></script>
+  <script src="js/include.js"></script>
+
   <script>
     // Initialize AOS
     AOS.init({
@@ -426,6 +431,8 @@
       includeHTML();
       initComponents();
     });
+
+    
   </script>
 </body>
 </html>
