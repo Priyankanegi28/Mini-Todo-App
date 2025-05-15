@@ -1,5 +1,6 @@
 const apiUrl = 'https://knowledgeable-aquatic-lasagna.glitch.me/todos';
 let todos = [];
+let currentFilter = 'all';
 
 // Get the logged-in user
 const user = JSON.parse(localStorage.getItem("user"));
@@ -11,6 +12,9 @@ if (!user) {
 // DOM Elements
 const todoList = document.getElementById("tasks-list");
 const addTodoForm = document.getElementById("add-todo-form");
+const taskFormContainer = document.getElementById("task-form-container");
+const addTaskBtn = document.getElementById("add-task-btn");
+const cancelTaskBtn = document.getElementById("cancel-task-btn");
 
 // Initialize the app
 document.addEventListener("DOMContentLoaded", function() {
@@ -24,8 +28,8 @@ function fetchTodos() {
   fetch(`${apiUrl}?email=${user.email}`)
     .then(response => response.json())
     .then(data => {
-      todos = data;
-      renderTodos();
+      todos = Array.isArray(data) ? data : [];
+      renderTodos(currentFilter);
       updateStats();
     })
     .catch(error => {
@@ -36,12 +40,13 @@ function fetchTodos() {
 
 // Render todos to the DOM
 function renderTodos(filter = 'all') {
+  currentFilter = filter;
   todoList.innerHTML = '';
   
   if (todos.length === 0) {
     todoList.innerHTML = `
       <div class="empty-state">
-      <img src="https://cdn-icons-png.flaticon.com/512/4076/4076478.png" alt="No tasks">
+        <img src="https://cdn-icons-png.flaticon.com/512/4076/4076478.png" alt="No tasks">
         <h3>No tasks yet</h3>
         <p>Click "Add Task" to create your first todo</p>
       </div>
@@ -64,7 +69,11 @@ function renderTodos(filter = 'all') {
   // Apply sorting
   const sortBy = document.getElementById("task-sort").value;
   if (sortBy === 'due-date') {
-    filteredTodos.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+    filteredTodos.sort((a, b) => {
+      const dateA = a.dueDate ? new Date(a.dueDate) : new Date(0);
+      const dateB = b.dueDate ? new Date(b.dueDate) : new Date(0);
+      return dateA - dateB;
+    });
   } else if (sortBy === 'priority') {
     const priorityOrder = { high: 1, medium: 2, low: 3 };
     filteredTodos.sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
@@ -76,15 +85,15 @@ function renderTodos(filter = 'all') {
   const searchTerm = document.getElementById("task-search").value.toLowerCase();
   if (searchTerm) {
     filteredTodos = filteredTodos.filter(todo => 
-      todo.title.toLowerCase().includes(searchTerm) || 
-      todo.description.toLowerCase().includes(searchTerm)
+      (todo.title && todo.title.toLowerCase().includes(searchTerm)) || 
+      (todo.description && todo.description.toLowerCase().includes(searchTerm))
     );
   }
   
   if (filteredTodos.length === 0) {
     todoList.innerHTML = `
       <div class="empty-state">
-      <img src="https://cdn-icons-png.flaticon.com/512/7486/7486768.png" alt="No tasks match your criteria">
+        <img src="https://cdn-icons-png.flaticon.com/512/7486/7486768.png" alt="No tasks match your criteria">
         <h3>No tasks match your criteria</h3>
         <p>Try adjusting your filters or search term</p>
       </div>
@@ -106,7 +115,7 @@ function renderTodos(filter = 'all') {
           ${todo.priority === 'medium' ? '<span class="task-priority priority-medium">Medium</span>' : ''}
           ${todo.priority === 'low' ? '<span class="task-priority priority-low">Low</span>' : ''}
         </div>
-        <div class="task-description">${todo.description}</div>
+        <div class="task-description">${todo.description || ''}</div>
         <div class="task-meta">
           ${todo.dueDate ? `
             <div class="task-due-date">
@@ -139,33 +148,87 @@ function setupEventListeners() {
     const description = document.getElementById("todo-description").value;
     const dueDate = document.getElementById("todo-due-date").value;
     const priority = document.querySelector(".priority-option.active").dataset.priority;
+    const isEditing = addTodoForm.dataset.editing;
     
-    const newTodo = {
-      title,
-      description,
-      dueDate,
-      priority,
-      userEmail: user.email,
-      completed: false
-    };
-
-    fetch(apiUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newTodo),
-    })
-      .then(response => response.json())
-      .then(todo => {
-        todos.push(todo);
-        renderTodos();
-        updateStats();
-        addTodoForm.reset();
-        document.getElementById("task-form-container").style.display = 'none';
+    if (isEditing) {
+      // Update existing todo
+      const existingTodo = todos.find(t => t.id == isEditing);
+      const updatedTodo = {
+        ...existingTodo,
+        title,
+        description,
+        dueDate,
+        priority
+      };
+      
+      fetch(`${apiUrl}/${isEditing}`, {
+        method: "PUT",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedTodo),
       })
-      .catch(error => {
-        console.error('Error adding todo:', error);
-        showError("Failed to add task. Please try again.");
-      });
+        .then(response => response.json())
+        .then(updatedTodo => {
+          const index = todos.findIndex(t => t.id == isEditing);
+          if (index !== -1) {
+            todos[index] = updatedTodo;
+          }
+          renderTodos(currentFilter);
+          updateStats();
+          resetForm();
+        })
+        .catch(error => {
+          console.error('Error updating todo:', error);
+          showError("Failed to update task. Please try again.");
+        });
+    } else {
+      // Add new todo
+      const newTodo = {
+        title,
+        description,
+        dueDate,
+        priority,
+        userEmail: user.email,
+        completed: false
+      };
+
+      fetch(apiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newTodo),
+      })
+        .then(response => response.json())
+        .then(todo => {
+          todos.push(todo);
+          renderTodos(currentFilter);
+          updateStats();
+          resetForm();
+        })
+        .catch(error => {
+          console.error('Error adding todo:', error);
+          showError("Failed to add task. Please try again.");
+        });
+    }
+  });
+
+  // Toggle task form
+  addTaskBtn.addEventListener('click', function() {
+    resetForm();
+    taskFormContainer.style.display = 'block';
+    document.getElementById("todo-title").focus();
+  });
+  
+  cancelTaskBtn.addEventListener('click', function() {
+    resetForm();
+    taskFormContainer.style.display = 'none';
+  });
+
+  // Priority selector
+  const priorityOptions = document.querySelectorAll('.priority-option');
+  priorityOptions.forEach(option => {
+    option.addEventListener('click', function() {
+      priorityOptions.forEach(opt => opt.classList.remove('active'));
+      this.classList.add('active');
+    });
   });
 
   // Filter todos
@@ -179,12 +242,12 @@ function setupEventListeners() {
 
   // Search todos
   document.getElementById("task-search").addEventListener("input", () => {
-    renderTodos(document.querySelector(".menu-item.active").dataset.filter);
+    renderTodos(currentFilter);
   });
 
   // Sort todos
   document.getElementById("task-sort").addEventListener("change", () => {
-    renderTodos(document.querySelector(".menu-item.active").dataset.filter);
+    renderTodos(currentFilter);
   });
 
   // Checkbox for completing todos
@@ -193,10 +256,13 @@ function setupEventListeners() {
       const todoId = e.target.dataset.id;
       const completed = e.target.checked;
       
+      const todo = todos.find(t => t.id == todoId);
+      if (!todo) return;
+      
       fetch(`${apiUrl}/${todoId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ completed, userEmail: user.email }),
+        body: JSON.stringify({ ...todo, completed, userEmail: user.email }),
       })
         .then(response => response.json())
         .then(updatedTodo => {
@@ -204,6 +270,7 @@ function setupEventListeners() {
           if (index !== -1) {
             todos[index] = updatedTodo;
           }
+          renderTodos(currentFilter);
           updateStats();
         })
         .catch(error => {
@@ -238,7 +305,7 @@ function editTodo(todoId) {
 
   // Fill the form with todo data
   document.getElementById("todo-title").value = todo.title;
-  document.getElementById("todo-description").value = todo.description;
+  document.getElementById("todo-description").value = todo.description || '';
   document.getElementById("todo-due-date").value = todo.dueDate || '';
   
   // Set priority
@@ -250,59 +317,20 @@ function editTodo(todoId) {
   });
   
   // Show form
-  document.getElementById("task-form-container").style.display = 'block';
+  taskFormContainer.style.display = 'block';
   document.getElementById("todo-title").focus();
   
   // Change form to update mode
-  const form = document.getElementById("add-todo-form");
-  form.dataset.editing = todoId;
-  form.querySelector("button[type='submit']").textContent = "Update Task";
-  
-  // Remove previous submit event and add update event
-  form.replaceWith(form.cloneNode(true));
-  const newForm = document.getElementById("add-todo-form");
-  
-  newForm.addEventListener("submit", function(e) {
-    e.preventDefault();
-    
-    const title = document.getElementById("todo-title").value;
-    const description = document.getElementById("todo-description").value;
-    const dueDate = document.getElementById("todo-due-date").value;
-    const priority = document.querySelector(".priority-option.active").dataset.priority;
-    
-    fetch(`${apiUrl}/${todoId}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ 
-        title, 
-        description, 
-        dueDate, 
-        priority,
-        userEmail: user.email 
-      }),
-    })
-      .then(response => response.json())
-      .then(updatedTodo => {
-        const index = todos.findIndex(t => t.id == todoId);
-        if (index !== -1) {
-          todos[index] = updatedTodo;
-        }
-        renderTodos();
-        newForm.reset();
-        document.getElementById("task-form-container").style.display = 'none';
-        delete newForm.dataset.editing;
-        newForm.querySelector("button[type='submit']").textContent = "Add Task";
-      })
-      .catch(error => {
-        console.error("Error updating todo:", error);
-        showError("Failed to update task. Please try again.");
-      });
-  });
+  addTodoForm.dataset.editing = todoId;
+  addTodoForm.querySelector("button[type='submit']").textContent = "Update Task";
 }
 
 // Delete todo
 function deleteTodo(todoId) {
   if (!confirm("Are you sure you want to delete this task?")) return;
+  
+  const todo = todos.find(t => t.id == todoId);
+  if (!todo) return;
   
   fetch(`${apiUrl}/${todoId}`, {
     method: "DELETE",
@@ -311,13 +339,24 @@ function deleteTodo(todoId) {
   })
     .then(() => {
       todos = todos.filter(todo => todo.id != todoId);
-      renderTodos();
+      renderTodos(currentFilter);
       updateStats();
     })
     .catch(error => {
       console.error("Error deleting todo:", error);
       showError("Failed to delete task. Please try again.");
     });
+}
+
+// Reset form
+function resetForm() {
+  addTodoForm.reset();
+  addTodoForm.removeAttribute('data-editing');
+  addTodoForm.querySelector("button[type='submit']").textContent = "Add Task";
+  document.querySelector('.priority-option[data-priority="medium"]').classList.add('active');
+  document.querySelectorAll('.priority-option').forEach(opt => {
+    if (opt.dataset.priority !== 'medium') opt.classList.remove('active');
+  });
 }
 
 // Update stats
@@ -350,3 +389,22 @@ function showError(message) {
     setTimeout(() => errorElement.remove(), 300);
   }, 5000);
 }
+
+// Add this at the top with other DOM elements
+const logoutBtn = document.getElementById('logout-btn');
+
+// Add this to your setupEventListeners function
+logoutBtn.addEventListener('click', function() {
+  localStorage.removeItem('user');
+  window.location.href = 'logout.html'; // or 'login.html' if you prefer
+});
+
+// Update the user info display in the DOMContentLoaded event
+document.addEventListener('DOMContentLoaded', function() {
+  const user = JSON.parse(localStorage.getItem('user'));
+  if (user) {
+    document.getElementById('username').textContent = user.name || 'User';
+    document.getElementById('user-email').textContent = user.email;
+  }
+  // ... rest of your existing code
+});
