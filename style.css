@@ -22,21 +22,6 @@
   --radius-sm: 6px;
 }
 
-[data-theme="dark"] {
-  --primary-color: #5a8fcc;
-  --primary-light: #7ca8e0;
-  --primary-dark: #4a7eb8;
-  --secondary-color: #7a858d;
-  --secondary-dark: #68727a;
-  --accent-color: #ff8e8e;
-  --text-color: #f8f9fa;
-  --text-light: #adb5bd;
-  --bg-color: #1a1a2e;
-  --card-bg: #16213e;
-  --border-color: #2a3a5a;
-  --shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-  --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.3);
-}
 
 /* Base Styles */
 * {
