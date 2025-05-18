@@ -15,12 +15,14 @@ const addTodoForm = document.getElementById("add-todo-form");
 const taskFormContainer = document.getElementById("task-form-container");
 const addTaskBtn = document.getElementById("add-task-btn");
 const cancelTaskBtn = document.getElementById("cancel-task-btn");
+const logoutBtn = document.getElementById('logout-btn');
 
 // Initialize the app
 document.addEventListener("DOMContentLoaded", function() {
   fetchTodos();
   setupEventListeners();
   updateStats();
+  checkForReminders(); // Check for reminders on page load
 });
 
 // Fetch todos from API
@@ -102,6 +104,9 @@ function renderTodos(filter = 'all') {
   }
   
   filteredTodos.forEach(todo => {
+    const dueDate = todo.dueDate ? new Date(todo.dueDate) : null;
+    const daysLeft = dueDate ? Math.ceil((dueDate - new Date()) / (1000 * 60 * 60 * 24)) : null;
+    
     const todoItem = document.createElement("div");
     todoItem.className = `task-item ${todo.completed ? 'task-completed' : ''}`;
     todoItem.innerHTML = `
@@ -114,13 +119,14 @@ function renderTodos(filter = 'all') {
           ${todo.priority === 'high' ? '<span class="task-priority priority-high">High</span>' : ''}
           ${todo.priority === 'medium' ? '<span class="task-priority priority-medium">Medium</span>' : ''}
           ${todo.priority === 'low' ? '<span class="task-priority priority-low">Low</span>' : ''}
+          ${daysLeft !== null && daysLeft <= 3 ? `<span class="task-days-left">${daysLeft} day${daysLeft !== 1 ? 's' : ''} left</span>` : ''}
         </div>
         <div class="task-description">${todo.description || ''}</div>
         <div class="task-meta">
           ${todo.dueDate ? `
             <div class="task-due-date">
               <i class="far fa-calendar-alt"></i>
-              ${new Date(todo.dueDate).toLocaleDateString()}
+              ${dueDate.toLocaleDateString()}
             </div>
           ` : ''}
           <div class="task-created">
@@ -296,6 +302,12 @@ function setupEventListeners() {
       deleteTodo(todoId);
     }
   });
+
+  // Logout
+  logoutBtn.addEventListener('click', function() {
+    localStorage.removeItem('user');
+    window.location.href = 'login.html';
+  });
 }
 
 // Edit todo
@@ -390,52 +402,44 @@ function showError(message) {
   }, 5000);
 }
 
-// Add this at the top with other DOM elements
-const logoutBtn = document.getElementById('logout-btn');
-
-// Add this to your setupEventListeners function
-logoutBtn.addEventListener('click', function() {
-  localStorage.removeItem('user');
-  window.location.href = 'logout.html'; // or 'login.html' if you prefer
-});
-
-// Update the user info display in the DOMContentLoaded event
-document.addEventListener('DOMContentLoaded', function() {
-  const user = JSON.parse(localStorage.getItem('user'));
-  if (user) {
-    document.getElementById('username').textContent = user.name || 'User';
-    document.getElementById('user-email').textContent = user.email;
-  }
-  // ... rest of your existing code
-});
-
-
-// new one
-
-
-// Replace the checkForReminders function in todos.js with:
+// Check for reminders (frontend version - just shows notification)
 function checkForReminders() {
-  fetch(`${apiUrl}/pending-tasks?email=${user.email}`)
+  fetch(`${apiUrl}/upcoming-tasks?email=${user.email}`)
     .then(response => response.json())
-    .then(pendingTasks => {
-      if (pendingTasks.length > 0) {
-        const subject = `You have ${pendingTasks.length} pending task(s)`;
-        let message = `Hi ${user.name || 'there'},\n\n`;
-        message += `Here's a reminder about your pending tasks:\n\n`;
-
-        pendingTasks.forEach(task => {
-          const dueDate = new Date(task.dueDate).toLocaleDateString();
-          message += `- ${task.title} (Due: ${dueDate}, Priority: ${task.priority})\n`;
+    .then(upcomingTasks => {
+      if (upcomingTasks.length > 0) {
+        const currentHour = new Date().getHours();
+        const timeOfDay = currentHour < 12 ? 'morning' : 'evening';
+        
+        let message = `You have ${upcomingTasks.length} upcoming task${upcomingTasks.length !== 1 ? 's' : ''}:\n\n`;
+        
+        upcomingTasks.forEach(task => {
+          const dueDate = new Date(task.dueDate);
+          const daysLeft = Math.ceil((dueDate - new Date()) / (1000 * 60 * 60 * 24));
+          message += `- ${task.title} (Due in ${daysLeft} day${daysLeft !== 1 ? 's' : ''})\n`;
         });
 
-        message += `\nPlease complete your tasks on time!\n\nBest regards,\nTodoPro Team`;
-
-        // Send reminder email
-        return fetch(`${apiUrl}/send-reminder`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: user.email, subject, message })
-        });
+        message += `\nDon't forget to complete them on time!`;
+        
+        // Show notification
+        if (Notification.permission === 'granted') {
+          new Notification(`TodoPro ${timeOfDay.charAt(0).toUpperCase() + timeOfDay.slice(1)} Reminder`, {
+            body: message,
+            icon: 'https://cdn-icons-png.flaticon.com/512/3652/3652191.png'
+          });
+        } else if (Notification.permission !== 'denied') {
+          Notification.requestPermission().then(permission => {
+            if (permission === 'granted') {
+              new Notification(`TodoPro ${timeOfDay.charAt(0).toUpperCase() + timeOfDay.slice(1)} Reminder`, {
+                body: message,
+                icon: 'https://cdn-icons-png.flaticon.com/512/3652/3652191.png'
+              });
+            }
+          });
+        }
+        
+        // Also show in-app notification
+        showError(`Reminder: ${upcomingTasks.length} upcoming task${upcomingTasks.length !== 1 ? 's' : ''}`);
       }
     })
     .catch(error => {

@@ -678,5 +678,67 @@ body {
   }
 }
 
-/* new one */
+/* new one yesterday */ 
 
+/* Add these new styles to your existing todos.css file */
+
+.task-days-left {
+  display: inline-block;
+  padding: 0.3rem 0.8rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-left: 0.5rem;
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.task-item.urgent {
+  border-left: 4px solid #dc3545;
+}
+
+.task-item.due-soon {
+  border-left: 4px solid #ffc107;
+}
+
+.notification-bell {
+  position: relative;
+  cursor: pointer;
+  margin-left: 1rem;
+}
+
+.notification-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: #dc3545;
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Update the task-item hover effect */
+.task-item:hover {
+  background-color: #f8fafc;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  z-index: 1;
+}
+
+/* Add animation for urgent tasks */
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(220, 53, 69, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0); }
+}
+
+.task-item.urgent {
+  animation: pulse 2s infinite;
+}
+
+/* Make sure this is at the end of your existing CSS */
